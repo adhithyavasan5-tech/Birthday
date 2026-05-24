@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday 🎂</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;1,400&family=Quicksand:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pink: #ff6b9d;
+            --rose: #ff4d7e;
+            --dark: #5a0030;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+            cursor: default;
+        }
+
+        /* BACKGROUND */
+
+        .bg-anim {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(135deg,
+                    #ff9a9e,
+                    #fad0c4,
+                    #a1c4fd,
+                    #c2e9fb,
+                    #fddb92,
+                    #fd7eb8);
+            background-size: 400% 400%;
+            animation: bgMove 10s ease infinite;
+        }
+
+        @keyframes bgMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* FLOATING ELEMENTS */
+
+        .petal {
+            position: fixed;
+            font-size: 1.3rem;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 2;
+            opacity: .8;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: .8;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* PAGE */
+
+        .page {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+            transition: .8s;
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: all;
+            z-index: 10;
+            animation: fadeZoom .8s ease;
+        }
+
+        @keyframes fadeZoom {
+            from {
+                opacity: 0;
+                transform: scale(1.05);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* COUNTDOWN */
+
+        #page1 {
+            text-align: center;
+            gap: 20px;
+        }
+
+        .lock {
+            font-size: 5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--dark);
+            text-shadow: 0 0 15px rgba(255, 255, 255, .6);
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #6b003a;
+        }
+
+        .timer {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .box {
+            background: rgba(255, 255, 255, .4);
+            backdrop-filter: blur(10px);
+            padding: 18px 22px;
+            border-radius: 20px;
+            min-width: 90px;
+            box-shadow: 0 8px 30px rgba(255, 255, 255, .25);
+        }
+
+        .num {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--rose);
+        }
+
+        .label {
+            font-size: .8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #6b003a;
+        }
+
+        /* LOVE PAGE */
+
+        #page2 {
+            gap: 25px;
+            text-align: center;
+        }
+
+        .question {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--dark);
+        }
+
+        .emoji {
+            font-size: 4rem;
+            animation: spin 5s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-wrap {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 35px;
+            font-size: 1.5rem;
+            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+            transition: .3s;
+        }
+
+        .yes {
+            background: linear-gradient(135deg, #ff6b9d, #ff4d7e);
+            color: white;
+            box-shadow: 0 8px 30px rgba(255, 77, 126, .5);
+        }
+
+        .yes:hover {
+            transform: scale(1.1);
+        }
+
+        .no {
+            position: fixed;
+            background: white;
+            color: #6b003a;
+        }
+
+        /* BUTTERFLIES */
+
+        #butterfly-area {
+            position: fixed;
+            inset: 0;
+        }
+
+        .catch-text {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, .5);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #5a0030;
+            backdrop-filter: blur(10px);
+        }
+
+        .butterfly {
+            position: absolute;
+            font-size: 2.2rem;
+            user-select: none;
+            animation: fly 5s linear infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, .7));
+            transition: .3s;
+        }
+
+        .butterfly:hover {
+            transform: scale(1.2);
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(60px, -80px);
+            }
+
+            50% {
+                transform: translate(-50px, 60px);
+            }
+
+            75% {
+                transform: translate(80px, 20px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        /* BOTTLE */
+
+        .bottle {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 150px;
+            z-index: 20;
+        }
+
+        .bottle-body {
+            position: absolute;
+            bottom: 0;
+            width: 100px;
+            height: 125px;
+            border-radius: 50px 50px 25px 25px;
+            background: rgba(255, 255, 255, .18);
+            border: 3px solid rgba(255, 255, 255, .6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 8px;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .bottle-neck {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 28px;
+            border: 3px solid rgba(255, 255, 255, .6);
+            border-bottom: none;
+            background: rgba(255, 255, 255, .2);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .cork {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 12px;
+            background: #b97a56;
+            border-radius: 6px;
+            transition: .5s;
+        }
+
+        .cork.open {
+            transform: translateX(-50%) translateY(-18px) rotate(25deg);
+        }
+
+        .count {
+            position: fixed;
+            bottom: 190px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, .5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: #5a0030;
+        }
+
+        .next-btn {
+            position: fixed;
+            bottom: 220px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+        }
+
+        /* LETTER */
+
+        .envelope {
+            width: min(380px, 90vw);
+            perspective: 800px;
+        }
+
+        .flap {
+            width: 100%;
+            height: 0;
+            border-left: 190px solid transparent;
+            border-right: 190px solid transparent;
+            border-top: 90px solid #ffb3c6;
+            transform-origin: top;
+            transition: .8s;
+        }
+
+        .flap.open {
+            transform: rotateX(180deg);
+        }
+
+        .letter {
+            background: rgba(255, 255, 255, .9);
+            padding: 30px;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+            max-height: 0;
+            overflow: hidden;
+            transition: 1s;
+        }
+
+        .letter.show {
+            max-height: 500px;
+        }
+
+        .letter h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--rose);
+            margin-bottom: 15px;
+        }
+
+        .letter p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            line-height: 2;
+            color: #6b003a;
+        }
+
+        .video-btn {
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* VIDEO */
+
+        #page5 {
+            background: black;
+        }
+
+        .video-box {
+            width: min(700px, 90%);
+            aspect-ratio: 16/9;
+            border: 3px dashed rgba(255, 255, 255, .3);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            gap: 15px;
+        }
+
+        .video-box h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--pink);
+        }
+
+        /* HEART FLOAT */
+
+        .float-heart {
+            position: fixed;
+            font-size: 1.5rem;
+            animation: heartFloat 2s ease forwards;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes heartFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-150px) scale(.5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-anim"></div>
+
+    <!-- MUSIC -->
+    <audio id="music" loop>
+        <!-- ADD MUSIC -->
+        <source src="Dheema BGM.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- MUSIC BUTTON -->
+    <button id="musicBtn" style="
+position:fixed;
+top:15px;
+right:15px;
+z-index:999;
+width:50px;
+height:50px;
+border-radius:50%;
+font-size:1.2rem;
+background:rgba(255,255,255,.5);
+backdrop-filter:blur(8px);
+">
+        🎵
+    </button>
+
+    <!-- PAGE 1 -->
+
+    <section class="page active" id="page1">
+
+        <div class="lock">🔒</div>
+
+        <div class="title">
+            Waiting For Your Special Day 💖
+        </div>
+
+        <div class="subtitle">
+            Every second brings me closer to celebrating you ✨
+        </div>
+
+        <div class="timer">
+
+            <div class="box">
+                <div class="num" id="days">00</div>
+                <div class="label">Days</div>
+            </div>
+
+            <div class="box">
+                <div class="num" id="hours">00</div>
+                <div class="label">Hours</div>
+            </div>
+
+            <div class="box">
+                <div class="num" id="minutes">00</div>
+                <div class="label">Minutes</div>
+            </div>
+
+            <div class="box">
+                <div class="num" id="seconds">00</div>
+                <div class="label">Seconds</div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PAGE 2 -->
+
+    <section class="page" id="page2">
+
+        <div class="emoji">💖</div>
+
+        <div class="question">
+            Do You Love Me?
+        </div>
+
+        <div class="btn-wrap">
+
+            <button class="yes" id="yesBtn">
+                Yes ❤️
+            </button>
+
+            <button class="no" id="noBtn">
+                No 💔
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- PAGE 3 -->
+
+    <section class="page" id="page3">
+
+        <div class="catch-text">
+            Catch all butterflies 🦋
+        </div>
+
+        <div id="butterfly-area"></div>
+
+        <div class="count">
+            <span id="caught">0</span>/7 butterflies
+        </div>
+
+        <div class="bottle">
+
+            <div class="bottle-neck"></div>
+
+            <div class="cork" id="cork"></div>
+
+            <div class="bottle-body" id="bottleBody"></div>
+
+        </div>
+
+        <button class="yes next-btn" id="letterBtn">
+            Open Letter 💌
+        </button>
+
+    </section>
+
+    <!-- PAGE 4 -->
+
+    <section class="page" id="page4">
+
+        <div class="envelope">
+
+            <div class="flap" id="flap"></div>
+
+            <div class="letter" id="letter">
+
+                <h1>Happy Birthday ❤️</h1>
+
+                <p>
+                    You are the most beautiful part of my life ✨<br><br>
+
+                    Your smile makes my world brighter,
+                    your voice gives me peace,
+                    and your love means everything to me 💖<br><br>
+
+                    Thank you for being in my life.<br><br>
+
+                    I love you forever ❤️
+                </p>
+
+                <button class="yes video-btn" id="videoBtn">
+                    Watch Surprise 🎥
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PAGE 5 -->
+
+    <section class="page" id="page5">
+
+        <div class="video-box">
+
+            <div style="font-size:4rem;">🎥</div>
+
+            <h2>Add Your Video Here</h2>
+
+            <p>
+                Replace this section with your video
+            </p>
+
+        </div>
+
+    </section>
+
+    <script>
+
+        /* PAGE SWITCH */
+
+        function showPage(id) {
+
+            document.querySelectorAll('.page')
+                .forEach(p => p.classList.remove('active'));
+
+            document.getElementById(id)
+                .classList.add('active');
+
+        }
+
+        /* MUSIC */
+
+        const music = document.getElementById('music');
+
+        document.getElementById('musicBtn')
+            .onclick = () => {
+
+                if (music.paused) {
+
+                    music.play().catch(() => { });
+                    musicBtn.innerHTML = '🔊';
+
+                } else {
+
+                    music.pause();
+                    musicBtn.innerHTML = '🎵';
+
+                }
+
+            };
+
+        /* FLOATING PETALS */
+
+        function createPetal() {
+
+            const p = document.createElement('div');
+
+            p.className = 'petal';
+
+            p.innerHTML = ['🌸', '💖', '✨']
+            [Math.floor(Math.random() * 3)];
+
+            p.style.left = Math.random() * 100 + 'vw';
+
+            p.style.animationDuration =
+                (5 + Math.random() * 5) + 's';
+
+            document.body.appendChild(p);
+
+            setTimeout(() => p.remove(), 10000);
+
+        }
+
+        setInterval(createPetal, 400);
+
+        /* COUNTDOWN */
+
+        const birthday =
+            new Date("July 12, 2026 00:00:00").getTime();
+
+        const timer = setInterval(() => {
+
+            const now = new Date().getTime();
+
+            const diff = birthday - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            days.innerHTML = d;
+            hours.innerHTML = h;
+            minutes.innerHTML = m;
+            seconds.innerHTML = s;
+
+            if (diff < 0) {
+
+                clearInterval(timer);
+
+                showPage('page2');
+
+            }
+
+        }, 1000);
+
+        /* NO BUTTON */
+
+        const noBtn = document.getElementById('noBtn');
+
+        document.addEventListener('mousemove', (e) => {
+
+            const rect = noBtn.getBoundingClientRect();
+
+            const dist = Math.hypot(
+                e.clientX - (rect.left + rect.width / 2),
+                e.clientY - (rect.top + rect.height / 2)
+            );
+
+            if (dist < 120) {
+
+                noBtn.style.left =
+                    Math.random() * 80 + 'vw';
+
+                noBtn.style.top =
+                    Math.random() * 80 + 'vh';
+
+            }
+
+        });
+
+        /* YES BUTTON */
+
+        document.getElementById('yesBtn')
+            .onclick = () => {
+
+                showPage('page3');
+
+                startButterflies();
+
+            };
+
+        /* BUTTERFLIES */
+
+        let caught = 0;
+        let started = false;
+
+        function startButterflies() {
+
+            if (started) return;
+
+            started = true;
+
+            const area = document.getElementById('butterfly-area');
+
+            for (let i = 0; i < 7; i++) {
+
+                const bf = document.createElement('div');
+
+                bf.className = 'butterfly';
+
+                bf.innerHTML = '🦋';
+
+                bf.style.left = Math.random() * 90 + 'vw';
+                bf.style.top = Math.random() * 70 + 'vh';
+
+                area.appendChild(bf);
+
+                const flyMove = setInterval(() => {
+
+                    bf.style.left = Math.random() * 90 + 'vw';
+                    bf.style.top = Math.random() * 70 + 'vh';
+
+                }, 2500);
+
+                bf.onclick = () => {
+
+                    clearInterval(flyMove);
+
+                    caught++;
+
+                    document.getElementById('caught')
+                        .innerHTML = caught;
+
+                    const mini = document.createElement('span');
+
+                    mini.innerHTML = '🦋';
+
+                    document.getElementById('bottleBody')
+                        .appendChild(mini);
+
+                    const heart = document.createElement('div');
+
+                    heart.className = 'float-heart';
+
+                    heart.innerHTML = '💖';
+
+                    heart.style.left = bf.style.left;
+                    heart.style.top = bf.style.top;
+
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 2000);
+
+                    bf.remove();
+
+                    if (caught === 7) {
+
+                        document.getElementById('cork')
+                            .classList.add('open');
+
+                        document.getElementById('letterBtn')
+                            .style.display = 'block';
+
+                    }
+
+                };
+
+            }
+
+        }
+
+        /* LETTER */
+
+        document.getElementById('letterBtn')
+            .onclick = () => {
+
+                showPage('page4');
+
+            };
+
+        document.getElementById('flap')
+            .onclick = () => {
+
+                flap.classList.add('open');
+
+                document.getElementById('letter')
+                    .classList.add('show');
+
+                document.getElementById('videoBtn')
+                    .style.display = 'inline-block';
+
+            };
+
+        /* VIDEO PAGE */
+
+        document.getElementById('videoBtn')
+            .onclick = () => {
+
+                showPage('page5');
+
+            };
+
+    </script>
+
+</body>
+
+</html>
